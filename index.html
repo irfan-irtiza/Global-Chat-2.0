@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-    <title>IRFAN - Neural Elite Guard</title>
+    <title>IRFAN - Global Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@1/index.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Orbitron:wght@900&display=swap');
         
-        /* NEURAL MOTION ENGINE */
+        /* NEURAL MOTION ENGINE - OPTIMIZED */
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent;
@@ -17,6 +17,7 @@
                         transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
                         opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1),
                         filter 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            will-change: transform, opacity;
         }
 
         /* DIGITAL SCROLLBAR CUSTOMIZATION */
@@ -39,6 +40,32 @@
         body.dark-mode .b-text { color: var(--text-main); }
         body.dark-mode .room-item { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
 
+        /* MODAL FIXES */
+        body.dark-mode #create-room-overlay .bg-white,
+        body.dark-mode #password-overlay .bg-white,
+        body.dark-mode #modal-overlay .bg-white {
+            background-color: #161b22 !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode #create-room-overlay h3,
+        body.dark-mode #password-overlay h3,
+        body.dark-mode #modal-overlay h3 {
+            color: #ffffff !important;
+        }
+        body.dark-mode #create-room-overlay .section-label,
+        body.dark-mode #password-overlay p {
+            color: rgba(255,255,255,0.6) !important;
+        }
+
+        body.dark-mode #password-overlay button.bg-slate-100 {
+            background-color: rgba(255,255,255,0.1) !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode #password-overlay button.bg-black {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); height: 100dvh; 
             display: flex; align-items: center; justify-content: center; margin: 0; overflow: hidden; 
@@ -51,19 +78,18 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
-        /* VIEW MANAGEMENT (NEW) */
         .view-screen {
             position: absolute; inset: 0; z-index: 50; background: var(--card);
             display: flex; flex-direction: column; opacity: 0; pointer-events: none; transform: scale(0.95);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .view-screen.active { opacity: 1; pointer-events: auto; transform: scale(1); z-index: 100; }
-        #chat-view { z-index: 40; position: relative; height: 100%; } /* Default underlying layer */
+        #chat-view { z-index: 40; position: relative; height: 100%; } 
 
         .read-receipt { display: flex; align-items: center; margin-left: 4px; }
         .tick-blue { color: #34b7f1; }
 
-        .msg-container { transform: translateY(10px); opacity: 0; animation: msg-slide 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        .msg-container { transform: translateY(10px); opacity: 0; animation: msg-slide 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards; position: relative; }
         @keyframes msg-slide { to { transform: translateY(0); opacity: 1; } }
 
         .msg-blurred { filter: blur(12px) grayscale(1); opacity: 0.1; transform: scale(0.9); pointer-events: none; }
@@ -93,10 +119,12 @@
         }
         .room-item:hover, .member-item:hover { background: rgba(0, 132, 255, 0.1); transform: scale(1.02); border-color: var(--primary); }
 
+        /* ADVANCED EMOJI PICKER WITH WITHDRAWAL FIX */
         emoji-picker { 
             display: none; position: absolute; bottom: 85px; left: 10px; right: 10px; z-index: 1000; 
-            height: 350px; width: calc(100% - 20px); border-radius: 12px; opacity: 0; transform: translateY(20px);
+            height: 350px; width: calc(100% - 20px); border-radius: 20px; opacity: 0; transform: translateY(20px);
             transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
         }
         emoji-picker.show { display: block; opacity: 1; transform: translateY(0); }
 
@@ -105,7 +133,7 @@
         .theme-dot { width: 34px; height: 34px; border-radius: 10px; cursor: pointer; border: 2px solid rgba(255,255,255,0.1); background-size: cover !important; }
         .theme-dot:hover { transform: scale(1.15); border-color: white; }
 
-        .bubble-me, .bubble-them { position: relative; margin-bottom: 12px; padding: 12px 14px 28px 14px; min-width: 100px; max-width: 85%; display: flex; flex-direction: column; }
+        .bubble-me, .bubble-them { position: relative; margin-bottom: 12px; padding: 12px 14px 28px 14px; min-width: 100px; max-width: 85%; display: flex; flex-direction: column; cursor: pointer; user-select: none; transition: transform 0.1s linear !important; }
         .bubble-me { background: var(--gradient); background-image: var(--texture), var(--gradient); background-size: var(--tex-size), auto; background-blend-mode: var(--tex-blend); color: white; border-radius: 18px 18px 4px 18px; }
         .bubble-them { background: #ffffff; color: #000000; border-radius: 4px 18px 18px 18px; }
         
@@ -118,27 +146,108 @@
         
         .toggle-active { background-color: #0084ff !important; color: white !important; transform: scale(1.05); }
         
-        #modal-overlay, #create-room-overlay, #password-overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); 
-            z-index: 3000; align-items: center; justify-content: center; padding: 20px; opacity: 0; transition: opacity 0.3s; 
+        #modal-overlay, #create-room-overlay, #password-overlay, #action-sheet-overlay { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(12px); 
+            z-index: 3000; align-items: flex-end; justify-content: center; opacity: 0; transition: opacity 0.3s; 
         }
-        #modal-overlay.show, #create-room-overlay.show, #password-overlay.show { display: flex; opacity: 1; }
+        #modal-overlay.show, #create-room-overlay.show, #password-overlay.show, #action-sheet-overlay.show { display: flex; opacity: 1; }
+
+        .action-sheet {
+            width: 100%; max-width: 450px; background: var(--card); border-radius: 32px 32px 0 0;
+            padding: 24px; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            will-change: transform;
+        }
+        #action-sheet-overlay.show .action-sheet { transform: translateY(0); }
+
+        .action-item {
+            display: flex; align-items: center; gap: 15px; padding: 16px; width: 100%;
+            font-weight: 800; font-size: 14px; border-radius: 16px; margin-bottom: 8px;
+        }
+        .action-item:active { background: rgba(0,0,0,0.05); transform: scale(0.98); }
 
         .section-label { font-size: 10px; font-weight: 900; text-transform: uppercase; opacity: 0.4; margin-bottom: 8px; display: block; letter-spacing: 1px; }
         
-        /* Floating Action Button for Create Room */
         .fab {
             position: absolute; bottom: 20px; right: 20px; width: 56px; height: 56px; border-radius: 50%;
             background: var(--gradient); color: white; display: flex; align-items: center; justify-content: center;
             box-shadow: 0 10px 20px rgba(0,132,255,0.4); cursor: pointer; z-index: 60;
         }
         .fab:hover { transform: scale(1.1) rotate(90deg); }
+
+        .msg-long-press-active { animation: press-shrink 0.6s cubic-bezier(0.23, 1, 0.32, 1) infinite alternate; }
+        @keyframes press-shrink { 0% { transform: scale(1); filter: brightness(1); } 100% { transform: scale(0.96); filter: brightness(0.85); } }
+
+        .pass-container { position: relative; }
+        .pass-toggle { 
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%); 
+            font-size: 12px; font-weight: 800; color: #0084ff; cursor: pointer; user-select: none;
+        }
+
+        /* REPLY UI STYLES */
+        .reply-box {
+            background: rgba(0,0,0,0.05); border-left: 4px solid var(--primary);
+            padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; font-size: 12px;
+        }
+        body.dark-mode .reply-box { background: rgba(255,255,255,0.05); }
+        .reply-preview-container {
+            display: none; padding: 10px 16px; background: var(--card); border-top: 1px solid rgba(0,0,0,0.05);
+            position: relative; animation: slide-up 0.3s ease-out;
+        }
+        .reply-preview-container.active { display: block; }
+        @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .reply-quote {
+            border-left: 3px solid var(--primary); padding-left: 10px; 
+            background: rgba(0,0,0,0.03); border-radius: 4px; padding: 6px 10px;
+        }
+        body.dark-mode .reply-quote { background: rgba(255,255,255,0.03); }
+
+        /* SLIDE TO REPLY CSS */
+        .reply-swipe-icon {
+            position: absolute; left: -40px; top: 50%; transform: translateY(-50%) scale(0);
+            width: 30px; height: 30px; border-radius: 50%; background: var(--primary);
+            display: flex; align-items: center; justify-content: center; color: white;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 5; opacity: 0.8;
+        }
     </style>
 </head>
 <body>
 
+    <div id="action-sheet-overlay" onclick="window.closeActionSheet()">
+        <div class="action-sheet" onclick="event.stopPropagation()">
+            <div class="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-6 opacity-40"></div>
+            
+            <div class="space-y-1">
+                <button onclick="window.initiateReply()" class="action-item text-blue-600 dark:text-blue-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                    Reply
+                </button>
+                <button onclick="window.copyMsg()" class="action-item text-slate-600 dark:text-slate-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                    Copy Text
+                </button>
+                <div id="owner-actions" class="hidden">
+                    <button onclick="window.startEdit()" class="action-item text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        Edit Message
+                    </button>
+                    <button onclick="window.confirmDelete(true)" class="action-item text-red-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Delete for Everyone
+                    </button>
+                </div>
+                <button onclick="window.confirmDelete(false)" class="action-item text-red-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    Delete for Me
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-overlay">
-        <div class="bg-white p-8 rounded-[32px] max-w-sm w-full text-center transform scale-90 transition-transform duration-300" id="modal-box">
+        <div class="bg-white p-8 rounded-[32px] max-w-sm w-full text-center transform scale-90 transition-transform duration-300" id="modal-box" style="margin-bottom: auto; margin-top: auto;">
             <h3 id="modal-title" class="text-xl font-black mb-2 text-black tracking-tight">Security Action</h3>
             <p id="modal-desc" class="text-slate-500 font-semibold text-sm leading-relaxed"></p>
             <div class="flex gap-3 mt-6">
@@ -149,26 +258,25 @@
     </div>
 
     <div id="create-room-overlay">
-        <div class="bg-white p-6 rounded-[32px] max-w-sm w-full transform scale-95 transition-transform duration-300">
+        <div class="bg-white p-6 rounded-[32px] max-w-sm w-full transform scale-95 transition-transform duration-300" style="margin-bottom: auto; margin-top: auto;">
             <h3 class="text-xl font-black mb-4 text-black italic">DEPLOY NEW ROOM</h3>
-            
             <div class="space-y-4">
                 <div>
                     <label class="section-label text-black">Room Codename</label>
                     <input type="text" id="new-room-name" class="w-full bg-slate-100 p-3 rounded-xl font-bold text-sm outline-none border border-transparent focus:border-blue-500 text-black" placeholder="ex: Headquarters">
                 </div>
-                
                 <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl">
                     <span class="text-xs font-bold text-slate-700">Private Channel?</span>
                     <input type="checkbox" id="is-private-check" class="w-5 h-5 accent-blue-600" onchange="window.togglePassField()">
                 </div>
-
                 <div id="room-pass-field" class="hidden">
                     <label class="section-label text-black">Security Key</label>
-                    <input type="password" id="new-room-pass" class="w-full bg-slate-100 p-3 rounded-xl font-bold text-sm outline-none text-black" placeholder="****">
+                    <div class="pass-container">
+                        <input type="password" id="new-room-pass" class="w-full bg-slate-100 p-3 rounded-xl font-bold text-sm outline-none text-black" placeholder="****">
+                        <span class="pass-toggle" onclick="window.togglePassVisibility('new-room-pass')">SHOW</span>
+                    </div>
                 </div>
             </div>
-
             <div class="flex gap-3 mt-6">
                 <button onclick="window.closeModal('create-room-overlay')" class="flex-1 py-3 font-bold bg-slate-100 rounded-2xl text-black uppercase text-[10px]">Abort</button>
                 <button onclick="window.submitCreateRoom()" class="flex-1 py-3 font-bold bg-blue-600 rounded-2xl text-white uppercase text-[10px] hover:bg-blue-700">Initialize</button>
@@ -177,22 +285,24 @@
     </div>
 
     <div id="password-overlay">
-        <div class="bg-white p-6 rounded-[32px] max-w-sm w-full text-center">
+        <div class="bg-white p-6 rounded-[32px] max-w-sm w-full text-center" style="margin-bottom: auto; margin-top: auto;">
             <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
             </div>
             <h3 class="text-lg font-black text-black">RESTRICTED ACCESS</h3>
             <p class="text-slate-400 text-xs font-bold mb-4">Authentication Required</p>
-            <input type="password" id="join-room-pass" class="w-full bg-slate-100 p-3 rounded-xl font-bold text-sm outline-none text-center mb-4 text-black" placeholder="Enter Password">
+            <div class="pass-container mb-4">
+                <input type="password" id="join-room-pass" class="w-full bg-slate-100 p-3 rounded-xl font-bold text-sm outline-none text-center text-black" placeholder="Enter Password">
+                <span class="pass-toggle" onclick="window.togglePassVisibility('join-room-pass')">SHOW</span>
+            </div>
             <div class="flex gap-2">
-                <button onclick="window.closeModal('password-overlay')" class="flex-1 py-2 font-bold bg-slate-100 rounded-xl text-xs">Cancel</button>
-                <button onclick="window.submitJoinPass()" class="flex-1 py-2 font-bold bg-black text-white rounded-xl text-xs">Unlock</button>
+                <button onclick="window.closeModal('password-overlay')" class="flex-1 py-3 font-bold bg-slate-100 rounded-xl text-[10px] uppercase text-black">Cancel</button>
+                <button onclick="window.submitJoinPass()" class="flex-1 py-3 font-bold bg-black text-white rounded-xl text-[10px] uppercase">Unlock</button>
             </div>
         </div>
     </div>
 
     <div class="app-container">
-        
         <div id="welcome-view" class="view-screen flex items-center justify-center p-8 text-center" style="z-index: 200;">
             <div class="w-full max-w-xs space-y-8">
                 <div>
@@ -220,8 +330,7 @@
                 <input type="text" oninput="window.filterRooms()" id="room-search" placeholder="Search frequencies..." class="w-full bg-slate-100 dark:bg-white/5 p-3 rounded-xl font-bold text-xs outline-none">
             </div>
             
-            <div class="flex-1 overflow-y-auto p-4" id="room-list-container">
-                </div>
+            <div class="flex-1 overflow-y-auto p-4" id="room-list-container"></div>
 
             <div class="fab" onclick="window.openCreateModal()">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
@@ -279,6 +388,16 @@
                                 <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/circuit-board.png');" onclick="window.updateCustom('tex', 'circuit')"></div>
                                 <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/polyester.png');" onclick="window.updateCustom('tex', 'fiber')"></div>
                                 <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');" onclick="window.updateCustom('tex', 'noise')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');" onclick="window.updateCustom('tex', 'paper')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');" onclick="window.updateCustom('tex', 'leather')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');" onclick="window.updateCustom('tex', 'wood')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/hexellence.png');" onclick="window.updateCustom('tex', 'hexagon')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/crissxcross.png');" onclick="window.updateCustom('tex', 'cross')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');" onclick="window.updateCustom('tex', 'matter')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/mirrored-squares.png');" onclick="window.updateCustom('tex', 'squares')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/skulls.png');" onclick="window.updateCustom('tex', 'skulls')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/woven.png');" onclick="window.updateCustom('tex', 'woven')"></div>
+                                <div class="theme-dot" style="background: #333; background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre-v2.png');" onclick="window.updateCustom('tex', 'carbon2')"></div>
                             </div>
                         </div>
                     </div>
@@ -319,6 +438,14 @@
             <div id="chat-window" class="flex-1 overflow-y-auto p-4 space-y-2 scroll-smooth"></div>
 
             <div class="bg-white border-t shrink-0 relative">
+                <div id="reply-preview" class="reply-preview-container">
+                    <div class="reply-quote relative">
+                        <span id="reply-preview-user" class="block text-[10px] font-black text-blue-500 uppercase">User</span>
+                        <p id="reply-preview-text" class="text-xs font-bold text-slate-500 truncate pr-6"></p>
+                        <button onclick="window.cancelReply()" class="absolute top-0 right-0 p-1 opacity-50 hover:opacity-100 font-black">✕</button>
+                    </div>
+                </div>
+
                 <emoji-picker id="picker"></emoji-picker>
                 <div class="p-4 bg-white">
                     <form onsubmit="window.send(event)" class="flex items-center gap-2 input-grey rounded-[24px] p-2 px-3">
@@ -336,24 +463,130 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDocs, writeBatch, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, setDoc, getDocs, writeBatch, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         const config = { apiKey: "AIzaSyDN5FVS2SCMH3C0m440KGKtAyttZCEKIA4", projectId: "my-first-chat-e6137", storageBucket: "my-first-chat-e6137.firebasestorage.app", appId: "1:284622815190:web:6547c331763db9b72a6e77" };
         const app = initializeApp(config); const db = getFirestore(app);
         
-        // --- GLOBAL STATE ---
         let user = localStorage.getItem('chat-username');
         let room = 'common'; 
-        let pendingRoomId = null; // Used for private join attempts
+        let pendingRoomId = null;
         let messageUnsub = null;
         let typingUnsub = null;
         let presenceUnsub = null;
         let nicknames = JSON.parse(localStorage.getItem('chat-nicknames') || '{}');
         let isSending = false;
+        let selectedMsgId = null;
+        let selectedMsgData = null;
+        let editingMsgId = null;
+        let replyToData = null; // Stores message being replied to
+
+        const playNotify = () => {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(580, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.05, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(); osc.stop(ctx.currentTime + 0.15);
+        };
 
         const clean = (s) => s?.replace(/[&<>"']/g, m => ({'&': '&amp;','<': '&lt;','>': '&gt;','"': '&quot;',"'": '&#39;'}[m])) || '';
 
-        // --- VIEW MANAGEMENT ---
+        window.togglePassVisibility = (id) => {
+            const input = document.getElementById(id);
+            const toggle = input.nextElementSibling;
+            if (input.type === "password") {
+                input.type = "text";
+                toggle.innerText = "HIDE";
+            } else {
+                input.type = "password";
+                toggle.innerText = "SHOW";
+            }
+        };
+
+        window.openActionSheet = (msgId, msgData) => {
+            selectedMsgId = msgId;
+            selectedMsgData = msgData;
+            const overlay = document.getElementById('action-sheet-overlay');
+            const ownerDiv = document.getElementById('owner-actions');
+            
+            if(msgData.sender === user) ownerDiv.classList.remove('hidden');
+            else ownerDiv.classList.add('hidden');
+
+            overlay.classList.add('show');
+            if (navigator.vibrate) navigator.vibrate([10, 30, 10]); 
+        };
+
+        window.closeActionSheet = () => {
+            document.getElementById('action-sheet-overlay').classList.remove('show');
+            document.querySelectorAll('.msg-long-press-active').forEach(el => el.classList.remove('msg-long-press-active'));
+        };
+
+        // REPLY LOGIC
+        window.initiateReply = () => {
+            replyToData = {
+                id: selectedMsgId || selectedMsgData.id,
+                sender: selectedMsgData.sender,
+                text: selectedMsgData.text || "Image"
+            };
+            const preview = document.getElementById('reply-preview');
+            document.getElementById('reply-preview-user').innerText = nicknames[replyToData.sender] || replyToData.sender;
+            document.getElementById('reply-preview-text').innerText = replyToData.text;
+            preview.classList.add('active');
+            document.getElementById('input').focus();
+            window.closeActionSheet();
+        };
+
+        window.cancelReply = () => {
+            replyToData = null;
+            document.getElementById('reply-preview').classList.remove('active');
+        };
+
+        window.scrollToMessage = (id) => {
+            const el = document.getElementById(`msg-${id}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('msg-pop');
+                setTimeout(() => el.classList.remove('msg-pop'), 2000);
+            }
+        };
+
+        window.copyMsg = () => {
+            if(selectedMsgData?.text) {
+                navigator.clipboard.writeText(selectedMsgData.text);
+                window.closeActionSheet();
+            }
+        };
+
+        window.startEdit = () => {
+            const input = document.getElementById('input');
+            input.value = selectedMsgData.text;
+            editingMsgId = selectedMsgId;
+            input.focus();
+            window.closeActionSheet();
+        };
+
+        window.confirmDelete = (forEveryone) => {
+            const title = forEveryone ? "Delete for Everyone" : "Delete for Me";
+            const desc = forEveryone ? "This will erase the message from the server." : "This will hide the message on this device only.";
+            
+            window.openModal(title, desc, async () => {
+                if(forEveryone) {
+                    await deleteDoc(doc(db, "messages", selectedMsgId));
+                } else {
+                    const localDeletes = JSON.parse(localStorage.getItem(`hidden_${room}`) || '[]');
+                    localDeletes.push(selectedMsgId);
+                    localStorage.setItem(`hidden_${room}`, JSON.stringify(localDeletes));
+                    location.reload();
+                }
+                window.closeActionSheet();
+            });
+        };
+
         window.switchView = (viewId) => {
             document.querySelectorAll('.view-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('chat-view').style.opacity = '0';
@@ -367,13 +600,14 @@
             }
         };
 
-        // --- INITIALIZATION ---
         window.initApp = () => {
-            // Apply theme
             const config = JSON.parse(localStorage.getItem('theme-config') || '{"color":"default","tex":"none"}');
             window.updateCustom('color', config.color);
             window.updateCustom('tex', config.tex);
-            window.toggleDarkMode(localStorage.getItem('dark-mode') === 'true');
+            
+            const savedDarkMode = localStorage.getItem('dark-mode');
+            const isDark = savedDarkMode === null ? true : savedDarkMode === 'true';
+            window.toggleDarkMode(isDark);
 
             if(!user) {
                 window.switchView('welcome-view');
@@ -383,7 +617,6 @@
             }
         };
 
-        // --- WELCOME SCREEN LOGIC ---
         window.enterApp = () => {
             const input = document.getElementById('welcome-input');
             const val = input.value.trim();
@@ -397,18 +630,15 @@
             }
         };
 
-        // --- LOBBY LOGIC ---
         window.loadLobby = () => {
             document.getElementById('welcome-user-display').innerText = `Operative: ${user}`;
             document.getElementById('user-avatar').innerText = user.charAt(0).toUpperCase();
 
-            // Real-time room list
             const q = query(collection(db, "rooms"), orderBy("createdAt", "desc"));
             onSnapshot(q, (snap) => {
                 const list = document.getElementById('room-list-container');
-                list.innerHTML = ""; // clear current
+                list.innerHTML = ""; 
                 
-                // Add default Common Room
                 const commonDiv = document.createElement('div');
                 commonDiv.className = 'room-item';
                 commonDiv.onclick = () => window.attemptJoin({id: 'common', name: 'Common Channel', isPrivate: false});
@@ -456,7 +686,6 @@
             });
         };
 
-        // --- ROOM CREATION ---
         window.openCreateModal = () => {
             document.getElementById('create-room-overlay').classList.add('show');
             document.getElementById('new-room-name').value = '';
@@ -480,7 +709,7 @@
             await addDoc(collection(db, "rooms"), {
                 name: name,
                 isPrivate: isPrivate,
-                password: password, // Note: In a production app, never store plain text passwords!
+                password: password, 
                 createdBy: user,
                 createdAt: serverTimestamp()
             });
@@ -488,7 +717,6 @@
             window.closeModal('create-room-overlay');
         };
 
-        // --- JOINING LOGIC ---
         window.attemptJoin = (roomData) => {
             if(roomData.isPrivate) {
                 pendingRoomId = roomData.id;
@@ -521,7 +749,6 @@
             room = roomId;
             document.getElementById('room-display').innerText = `Room: ${roomName}`;
             
-            // Unsubscribe previous listeners
             if(messageUnsub) messageUnsub();
             if(typingUnsub) typingUnsub();
             if(presenceUnsub) presenceUnsub();
@@ -529,13 +756,14 @@
             window.loadMessages();
             window.setupPresence();
             window.switchView('chat-view');
+            // ADDED: Pushes a state to history so back button works
+            history.pushState({chat: true}, null, "");
         };
 
         window.returnToLobby = () => {
             window.switchView('lobby-view');
         };
 
-        // --- MODAL SYSTEM ---
         window.openModal = (title, desc, confirmAction) => {
             const overlay = document.getElementById('modal-overlay');
             const box = document.getElementById('modal-box');
@@ -581,7 +809,6 @@
                 document.getElementById('online-count').innerText = `${s.size} ACTIVE`;
                 const listContainer = document.getElementById('active-members-list');
                 listContainer.innerHTML = '';
-                
                 s.forEach(doc => {
                     const member = doc.id;
                     const display = nicknames[member] ? `${nicknames[member]} (@${member})` : member;
@@ -617,13 +844,38 @@
                 if (nick.trim() === "") delete nicknames[originalUser];
                 else nicknames[originalUser] = nick.trim();
                 localStorage.setItem('chat-nicknames', JSON.stringify(nicknames));
-                // Refresh list logic implicitly via snapshot or reload
                 location.reload(); 
             }
         };
 
-        window.toggleEmoji = () => document.getElementById('picker').classList.toggle('show');
-        document.getElementById('picker').addEventListener('emoji-click', e => { document.getElementById('input').value += e.detail.unicode; window.handleTyping(); });
+        window.toggleEmoji = () => {
+            const picker = document.getElementById('picker');
+            const input = document.getElementById('input');
+            const isShowing = picker.classList.contains('show');
+            
+            if (isShowing) {
+                picker.classList.remove('show');
+                input.blur(); 
+            } else {
+                picker.classList.add('show');
+                input.focus();
+            }
+        };
+
+        document.getElementById('picker').addEventListener('emoji-click', e => { 
+            const input = document.getElementById('input');
+            input.value += e.detail.unicode; 
+            window.handleTyping();
+        });
+
+        document.addEventListener('click', (e) => {
+            const picker = document.getElementById('picker');
+            const emojiBtn = e.target.closest('button');
+            if (!picker.contains(e.target) && (!emojiBtn || emojiBtn.innerText !== '😊')) {
+                picker.classList.remove('show');
+            }
+        });
+
         window.toggleFolder = () => document.getElementById('settings-folder').classList.toggle('open');
 
         const colors = {
@@ -649,17 +901,26 @@
             grid: { url: "url('https://www.transparenttextures.com/patterns/grid-me.png')", blend: 'overlay' },
             circuit: { url: "url('https://www.transparenttextures.com/patterns/circuit-board.png')", blend: 'overlay' },
             fiber: { url: "url('https://www.transparenttextures.com/patterns/polyester.png')", blend: 'soft-light' },
-            noise: { url: "url('https://www.transparenttextures.com/patterns/asfalt-dark.png')", blend: 'soft-light' }
+            noise: { url: "url('https://www.transparenttextures.com/patterns/asfalt-dark.png')", blend: 'soft-light' },
+            // NEW TEXTURE MAPPINGS
+            paper: { url: "url('https://www.transparenttextures.com/patterns/black-paper.png')", blend: 'multiply' },
+            leather: { url: "url('https://www.transparenttextures.com/patterns/dark-leather.png')", blend: 'soft-light' },
+            wood: { url: "url('https://www.transparenttextures.com/patterns/dark-wood.png')", blend: 'multiply' },
+            hexagon: { url: "url('https://www.transparenttextures.com/patterns/hexellence.png')", blend: 'overlay' },
+            cross: { url: "url('https://www.transparenttextures.com/patterns/crissxcross.png')", blend: 'soft-light' },
+            matter: { url: "url('https://www.transparenttextures.com/patterns/dark-matter.png')", blend: 'overlay' },
+            squares: { url: "url('https://www.transparenttextures.com/patterns/mirrored-squares.png')", blend: 'overlay' },
+            skulls: { url: "url('https://www.transparenttextures.com/patterns/skulls.png')", blend: 'soft-light' },
+            woven: { url: "url('https://www.transparenttextures.com/patterns/woven.png')", blend: 'multiply' },
+            carbon2: { url: "url('https://www.transparenttextures.com/patterns/carbon-fibre-v2.png')", blend: 'overlay' }
         };
 
         window.updateCustom = (type, value) => {
             let config = JSON.parse(localStorage.getItem('theme-config') || '{"color":"default","tex":"none"}');
             config[type] = value;
             localStorage.setItem('theme-config', JSON.stringify(config));
-            
             const grad = colors[config.color];
             const tex = textures[config.tex];
-            
             document.documentElement.style.setProperty('--gradient', grad);
             document.documentElement.style.setProperty('--texture', tex.url);
             document.documentElement.style.setProperty('--tex-blend', tex.blend);
@@ -691,7 +952,19 @@
             if(!v) return; 
             isSending = true; inputEl.value = ''; 
             document.getElementById('picker').classList.remove('show');
-            try { await addDoc(collection(db, "messages"), { room, sender: user, text: v, createdAt: serverTimestamp() }); } finally { isSending = false; }
+            try { 
+                if(editingMsgId) {
+                    await updateDoc(doc(db, "messages", editingMsgId), { text: v });
+                    editingMsgId = null;
+                } else {
+                    const msgObj = { room, sender: user, text: v, createdAt: serverTimestamp() };
+                    if(replyToData) {
+                        msgObj.replyTo = replyToData;
+                        window.cancelReply();
+                    }
+                    await addDoc(collection(db, "messages"), msgObj); 
+                }
+            } finally { isSending = false; }
         };
 
         window.img = (e) => { 
@@ -700,39 +973,149 @@
             r.readAsDataURL(f); 
         };
 
+        const attachInteractions = (wrap, id, m) => {
+            let pressTimer;
+            let isMoving = false;
+            let startX = 0;
+            let diffX = 0;
+            const bubble = wrap.querySelector('.b-box');
+            const icon = wrap.querySelector('.reply-swipe-icon');
+
+            const startPress = (e) => {
+                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                isMoving = false;
+                diffX = 0;
+                
+                wrap.classList.add('msg-long-press-active');
+                pressTimer = setTimeout(() => {
+                    wrap.classList.remove('msg-long-press-active');
+                    if (Math.abs(diffX) < 10) window.openActionSheet(id, m);
+                }, 600); 
+            };
+
+            const handleMove = (e) => {
+                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                diffX = currentX - startX;
+                
+                if (diffX > 5) { // Only swipe right
+                    isMoving = true;
+                    clearTimeout(pressTimer);
+                    wrap.classList.remove('msg-long-press-active');
+                    
+                    const move = Math.min(diffX * 0.5, 60);
+                    bubble.style.transform = `translateX(${move}px)`;
+                    
+                    if (icon) {
+                        const scale = Math.min(move / 50, 1);
+                        icon.style.transform = `translateY(-50%) scale(${scale})`;
+                        icon.style.left = `${move - 45}px`;
+                    }
+                }
+            };
+
+            const cancelPress = () => {
+                clearTimeout(pressTimer);
+                wrap.classList.remove('msg-long-press-active');
+                
+                if (diffX > 50) {
+                    selectedMsgId = id;
+                    selectedMsgData = { ...m, id };
+                    window.initiateReply();
+                    if (navigator.vibrate) navigator.vibrate(20);
+                }
+                
+                bubble.style.transform = '';
+                if (icon) icon.style.transform = 'translateY(-50%) scale(0)';
+                
+                isMoving = false;
+                diffX = 0;
+            };
+
+            wrap.addEventListener('touchstart', startPress, { passive: true });
+            wrap.addEventListener('touchmove', handleMove, { passive: true });
+            wrap.addEventListener('touchend', cancelPress);
+            
+            wrap.addEventListener('mousedown', startPress);
+            wrap.addEventListener('mousemove', (e) => { if(e.buttons === 1) handleMove(e); });
+            wrap.addEventListener('mouseup', cancelPress);
+            wrap.addEventListener('mouseleave', cancelPress);
+        };
+
         window.loadMessages = () => {
             const cutoff = parseInt(localStorage.getItem(`deleted_at_${room}`)) || 0;
+            const localHidden = JSON.parse(localStorage.getItem(`hidden_${room}`) || '[]');
             const win = document.getElementById('chat-window');
-            win.innerHTML = ''; // Clear for new room
+            win.innerHTML = ''; 
 
             messageUnsub = onSnapshot(query(collection(db, "messages"), where("room", "==", room), orderBy("createdAt", "asc")), snap => {
                 snap.docChanges().forEach(change => {
+                    const m = change.doc.data();
+                    const id = change.doc.id;
+                    if(localHidden.includes(id)) return;
+                    
                     if(change.type === "added") {
-                        const m = change.doc.data();
                         if ((m.createdAt?.toMillis() || Date.now()) <= cutoff) return;
                         const isMe = m.sender === user;
                         const wrap = document.createElement('div');
+                        wrap.id = `msg-${id}`;
                         wrap.className = `msg-container flex flex-col ${isMe ? 'items-end' : 'items-start'} w-full`;
-                        const ticks = isMe ? `<span class="read-receipt"><svg class="w-3 h-3 tick-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7m-12 10l4 4L21 11"/></svg></span>` : '';
                         
+                        const ticks = isMe ? `<span class="read-receipt"><svg class="w-3 h-3 tick-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7m-12 10l4 4L21 11"/></svg></span>` : '';
                         const senderDisplay = nicknames[m.sender] || m.sender;
+                        
+                        // REPLY BUBBLE HTML
+                        let replyHtml = '';
+                        if(m.replyTo) {
+                            replyHtml = `
+                                <div class="reply-box opacity-70 mb-2 cursor-pointer" onclick="window.scrollToMessage('${m.replyTo.id}')">
+                                    <span class="block text-[8px] font-black uppercase text-blue-500">${nicknames[m.replyTo.sender] || m.replyTo.sender}</span>
+                                    <span class="text-[10px] line-clamp-1">${clean(m.replyTo.text)}</span>
+                                </div>
+                            `;
+                        }
 
-                        wrap.innerHTML = `<span class="text-[10px] font-bold text-slate-500 mb-1 px-2 uppercase">${clean(senderDisplay)}</span>
+                        wrap.innerHTML = `
+                            <div class="reply-swipe-icon">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                            </div>
+                            <span class="text-[10px] font-bold text-slate-500 mb-1 px-2 uppercase">${clean(senderDisplay)}</span>
                             <div class="b-box ${isMe ? 'bubble-me' : 'bubble-them'}">
+                                ${replyHtml}
                                 ${m.image ? `<img src="${m.image}" class="rounded-lg mb-1">` : `<p class="b-text" data-raw="${m.text}">${clean(m.text)}</p>`}
                                 <div class="msg-meta">
                                     <span class="time-text">${new Date(m.createdAt?.toMillis()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
                                     ${ticks}
                                 </div>
                             </div>`;
+                        
                         win.appendChild(wrap);
+                        attachInteractions(wrap, id, m);
                         win.scrollTop = win.scrollHeight;
+                        if(!isMe) playNotify();
+                    }
+                    if(change.type === "modified") {
+                        const el = document.getElementById(`msg-${id}`);
+                        if(el) {
+                            const bText = el.querySelector('.b-text');
+                            if(bText) bText.innerText = m.text;
+                        }
+                    }
+                    if(change.type === "removed") {
+                        document.getElementById(`msg-${id}`)?.remove();
                     }
                 });
             });
         };
 
-        // Start the app
+        // ADDED: Listener for the back button
+        window.addEventListener('popstate', (event) => {
+            const chatView = document.getElementById('chat-view');
+            // If the chat view is active (opacity 1) when back is pressed, go to lobby
+            if (chatView && chatView.style.opacity === '1') {
+                window.returnToLobby();
+            }
+        });
+
         window.initApp();
 
     </script>
