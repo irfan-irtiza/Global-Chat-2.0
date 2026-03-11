@@ -102,8 +102,6 @@ Planned upgrades for the project:
 
 🔐 User authentication
 
-👥 Private chat rooms
-
 📷 Image sharing
 
 🎤 Voice messages
