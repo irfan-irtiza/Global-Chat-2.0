@@ -3,7 +3,7 @@
 A modern real-time global chat web application that allows users to communicate instantly in a clean, fast, and responsive interface.
 
 🔗 Live App:
-https://rfan-globalchat.web.app
+https://irfan-globalchat.web.app
 
 📌 Overview
 
@@ -80,7 +80,7 @@ irfan-global-chat
 This project is hosted using Firebase Hosting.
 
 🔗 Live URL
-https://rfan-globalchat.web.app
+https://irfan-globalchat.web.app
 
 
 📱 Browser Compatibility
